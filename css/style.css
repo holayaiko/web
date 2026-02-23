@@ -1,0 +1,78 @@
+/* Variables y Configuración de Categorías */
+body.categoria-impresion {
+  --c1: #212cbb; --c2: #3533cc; --c3: #3265c5; --c4: #2759e2;
+  --color-titulo: #212cbb;
+}
+
+body.categoria-diseno {
+  --c1: #8e4bcf; --c2: #b14bd6; --c3: #9c5cff; --c4: #d05cd3;
+  --color-titulo: #8e4bcf;
+}
+
+/* Base */
+@property --c1 { syntax: "<color>"; initial-value: #212cbb; inherits: false; }
+@property --c2 { syntax: "<color>"; initial-value: #3533cc; inherits: false; }
+@property --c3 { syntax: "<color>"; initial-value: #3265c5; inherits: false; }
+@property --c4 { syntax: "<color>"; initial-value: #2759e2; inherits: false; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Fredoka", sans-serif;
+  background-color: #ffffff;
+  overflow-x: hidden;
+}
+
+.logo {
+  position: fixed;
+  top: 50px;
+  left: 55px;
+  width: 150px;
+  z-index: 200;
+  filter: brightness(0) invert(1) drop-shadow(0 0 3px rgba(0,0,0,0.4));
+}
+
+.gradient-bar {
+  height: 150px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 100;
+  background: linear-gradient(130deg, var(--c1), var(--c2), var(--c3), var(--c4));
+  background-size: 400% 400%;
+  animation: gradientMove 18s ease infinite;
+}
+
+.header-banner { top: 0; }
+.footer-banner { bottom: 0; }
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.category-icon {
+  position: absolute;
+  top: 25px;
+  right: 55px;
+  height: 100px;
+  z-index: 150;
+  filter: brightness(0) invert(1) drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+}
+
+.main-content {
+  position: relative;
+  padding-top: 150px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 50;
+}
+
+.content-block h2 {
+  font-family: "Bowlby One", cursive;
+  font-size: 3rem;
+  color: var(--color-titulo);
+}
