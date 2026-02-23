@@ -1,0 +1,336 @@
+
+/* =============================
+   VARIABLES Y TEMAS GLOBALES
+   ============================= */
+:root {
+    --border-radius: 20px;
+    --transition-smooth: 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.5s ease;
+}
+
+/* Propiedades animables para gradientes */
+@property --c1 { syntax: "<color>"; initial-value: #8e4bcf; inherits: true; }
+@property --c2 { syntax: "<color>"; initial-value: #b14bd6; inherits: true; }
+@property --c3 { syntax: "<color>"; initial-value: #9c5cff; inherits: true; }
+@property --c4 { syntax: "<color>"; initial-value: #d960dd; inherits: true; }
+
+/* Temas por categoría */
+[class*="categoria-"] { --color-accent: var(--c1); }
+.categoria-diseno       { --c1: #8e4bcf; --c2: #b14bd6; --c3: #9c5cff; --c4: #d960dd; }
+.categoria-impresion    { --c1: #212cbb; --c2: #3533cc; --c3: #3265c5; --c4: #2759e2; }
+.categoria-editorial    { --c1: #0064c1; --c2: #00bcd4; --c3: #5c9cd8; --c4: #0097a7; }
+.categoria-programacion { --c1: #16a085; --c2: #1abc9c; --c3: #48c9b0; --c4: #148f77; }
+.categoria-modelado3d   { --c1: #52ae27; --c2: #2ecc71; --c3: #10aa37; --c4: #1e8449; --color-accent: #1e8449; }
+.categoria-video        { --c1: #f1c40f; --c2: #f4d03f; --c3: #f7dc6f; --c4: #d4ac0d; }
+.categoria-audio        { --c1: #e67e22; --c2: #f39c12; --c3: #eb984e; --c4: #d35400; }
+.categoria-otros        { --c1: #e74c3c; --c2: #ec7063; --c3: #f1948a; --c4: #c0392b; }
+
+
+/* =============================
+   BASE Y ELEMENTOS FIJOS
+   ============================= */
+body {
+    margin: 0;
+    font-family: "Fredoka", sans-serif;
+    background-color: #fff;
+    overflow-x: hidden;
+}
+
+
+.logo, .category-icon {
+    position: fixed;
+    z-index: 200;
+    filter: brightness(0) invert(1) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+}
+.logo {
+    top: 50px;
+    left: 55px;
+    width: clamp(100px, 15vw, 150px);
+}
+.category-icon {
+    position: absolute;
+    top: 25px;
+    right: 55px;
+    height: clamp(70px, 10vw, 100px);
+}
+
+
+/* =============================
+   GRADIENTES Y BANNERS
+   ============================= */
+.gradient-bar {
+    height: clamp(100px, 35vw, 150px);
+    width: 100%;
+    position: absolute;
+    left: 0;
+    z-index: 100;
+    background: linear-gradient(130deg, var(--c1), var(--c2), var(--c3), var(--c4));
+    background-size: 400% 400%;
+    animation: gradientMove 18s ease infinite;
+}
+.footer-banner { bottom: 0; }
+@keyframes gradientMove {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+
+/* =============================
+   CONTENIDO PRINCIPAL
+   ============================= */
+.main-content {
+    position: relative;
+    padding-top: clamp(100px, 15vw, 150px);
+    min-height: 200vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 50;
+}
+.content-block h2 {
+    font-family: "Bowlby One", cursive;
+    font-size: clamp(2rem, 3.5vw, 3.5rem);
+    color: var(--color-accent);
+    text-transform: uppercase;
+}
+
+
+/* =============================
+   COMPONENTE 3D Y EFECTOS
+   ============================= */
+.scene-3d {
+    width: 100%;
+    max-width: 500px;
+    margin: 40px auto;
+    perspective: 1800px;
+    position: relative;
+    transition: transform var(--transition-smooth);
+}
+.card-3d {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+    border-radius: var(--border-radius);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+    --mask-offset: 50%;
+}
+.card-3d img, .effect-layer { 
+    border-radius: var(--border-radius);
+    width: 100%;
+}
+.effect-layer {
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(135deg, transparent calc(var(--mask-offset) - var(--m-size)), black var(--mask-offset), transparent calc(var(--mask-offset) + var(--m-size)));
+}
+.scene-3d:hover .effect-layer { opacity: 1; }
+/* Variantes de efectos */
+.variante-amigos { --m-size: 20%; --sat-val: 3.5; --hue-deg: 90deg; --hue-sat: 2.5; --hue-m: 12%; }
+.variante-anomalo { --m-size: 30%; --sat-val: 4.2; --hue-deg: 36deg; --hue-sat: 0.5; --hue-m: 15%; }
+.variante-egipto { 
+    max-width: 700px; 
+    width: 60vw; 
+    aspect-ratio: 1 / 1; 
+    --m-size: 20%; 
+    --sat-val: 3.8; /* Intensidad de saturación */
+    --hue-deg: 180deg; /* Tinte cian/dorado */
+    --hue-sat: 2.0; 
+    --hue-m: 15%; 
+}
+/* Lógica de capas unificada */
+.layer-saturate { filter: saturate(var(--sat-val)); }
+.layer-hue { filter: hue-rotate(var(--hue-deg)) saturate(var(--hue-sat)); --m-size: var(--hue-m); }
+
+
+/* =============================
+   SECCIÓN SHOWCASE
+   ============================= */
+.black-section {
+    background-color: #000;
+    color: #fff;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 100px 0;
+}
+.showcase-container {
+    display: flex;
+    width: 100%;
+}
+.showcase-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all var(--transition-smooth);
+    position: relative;
+}
+.panel-left, .panel-center, .panel-right { align-items: center; }
+.panel-left { flex: 1; padding-left: 5%; }
+.panel-center { flex: 1.2; text-align: center; }
+.panel-right { flex: 1; padding-right: 5%; }
+.showcase-text {
+    position: absolute;
+    top: 50%;
+    max-width: 400px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-medium);
+    line-height: 200%;
+    padding: 120px;
+    width: 100%;
+    transform: translateY(-50%) translateX(var(--text-x-base));
+}
+.text-anomalo {
+    left: 100%;
+    text-align: left;
+    --text-x-base: 120px;
+    --text-x-active: 100px;
+}
+.text-amigos {
+    right: 100%;
+    text-align: right;
+    --text-x-base: -120px;
+    --text-x-active: -100px;
+}
+.intro-title h2 {
+    font-family: "Bowlby One", cursive;
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1;
+    margin-bottom: 10px;
+    transition: opacity var(--transition-fast);
+}
+
+
+/* =============================
+   ESTADOS ACTIVOS (SHOWCASE)
+   ============================= */
+/* 1. Elementos que desaparecen en cualquier estado activo */
+.active-anomalo .panel-center,
+.active-amigos .panel-center,
+.active-anomalo .intro-title h2,
+.active-amigos .intro-title h2 {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-fast);
+}
+/* 2. Ocultar botones contrarios */
+.active-anomalo #btn-amigos,
+.active-amigos #btn-anomalo {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-medium) 0.2s;
+}
+/* 3. Desplazamiento de Escenas 3D */
+.active-anomalo .panel-left .scene-3d { --scene-move: 200px; }
+.active-amigos .panel-right .scene-3d { --scene-move: -200px; }
+.active-anomalo .panel-left .scene-3d,
+.active-amigos .panel-right .scene-3d {
+    transform: translateX(var(--scene-move));
+    transition: transform var(--transition-medium) 0.2s;
+}
+/* 4. Textos que aparecen */
+.active-anomalo .text-anomalo,
+.active-amigos .text-amigos {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(var(--text-x-active));
+    transition: all var(--transition-medium) 0.2s;
+}
+
+
+/* =============================
+   COMPONENTES UI
+   ============================= */
+.showcase-text h3 {
+    font-family: "Bowlby One";
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+.showcase-text p {
+    font-size: 16pt;
+}
+.pill-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: "Fredoka";
+}
+.click-hint {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+/* =============================
+   SECCIÓN PROYECTO FINAL (PFG)
+   ============================= */
+#showcase-proyecto-final {
+    perspective: 2000px;
+    overflow: visible;
+}
+.pfg-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+.variante-egipto {
+    max-width: 700px; /* Tamaño doble */
+    width: 60vw;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    --m-size: 25%;
+}
+.card-pivoting {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-pivoting .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden; /* Evita que se vea el reverso parpadeante */
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+.card-pivoting .back {
+    transform: rotateY(180deg); /* La cara trasera nace girada */
+}
+/* ESTADOS ACTIVOS PFG */
+#showcase-proyecto-final.active-egipto .pfg-container {
+    transform: translateX(-20%);
+}
+#showcase-proyecto-final.active-egipto .card-pivoting {
+    transform: rotateY(180deg);
+}
+.text-egipto {
+    left: 105%;
+    width: 400px;
+    --text-x-base: 100px;
+    --text-x-active: 0px;
+    opacity: 0;
+    visibility: hidden;
+}
+#showcase-proyecto-final.active-egipto .text-egipto {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+    transition: all 0.6s ease 0.3s; /* Delay para que aparezca tras el giro */
+}
